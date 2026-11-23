@@ -33,7 +33,7 @@ class mimir::config {
   # as it is expected by package when upgrading.
   file { "${config_dir}/config.yml":
     ensure       => 'file',
-    content      => to_yaml($::mimir::config_hash),
+    content      => Sensitive(to_yaml($::mimir::config_hash)),
     owner        => $config_owner,
     group        => $config_group,
     mode         => '0640',
@@ -45,7 +45,7 @@ class mimir::config {
   # defined in Environment are override per the ones from EnvironmentFile.
   # This means we cannot define the CONFIG_FILE environment with a drop-in
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       $environment_file =  '/etc/default/mimir'
     }
